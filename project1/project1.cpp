@@ -59,7 +59,21 @@ int main()
       matrixB.push_back(row);
     }
 
-  
+  // Create product matrix
+  for(int r = 0; r < Crow; r++)
+    {
+      vector<int> row;
+      for(int c = 0; c < Ccol; c++)
+	{
+	  int sum = 0;
+	  for(int i = 0; i < Acol; i++)
+	    {
+	      sum += matrixA[r].at(i)*matrixB[i].at(c);
+	    }
+	  row.push_back(sum);
+	}
+      matrixC.push_back(row);
+    }
 
   cout << "Printing matrix A: " << endl;
   for(int r = 0; r < Arow; r++)
@@ -70,6 +84,7 @@ int main()
 	}
       cout << "\n";
     }
+  cout << "\n";
 
   cout << "Printing matrix B: " << endl;
   for(int r = 0; r < Brow; r++)
@@ -80,6 +95,16 @@ int main()
 	}
       cout << "\n";
     }
+  cout << "\n";
 
+  cout << "Printing matrix C: " << endl;
+  for(int r = 0; r < Crow; r++)
+    {
+      for(int c = 0; c < Ccol; c++)
+	{
+	  cout << matrixC[r].at(c) << " ";
+	}
+      cout << "\n";
+    }
   return 0;
 }
