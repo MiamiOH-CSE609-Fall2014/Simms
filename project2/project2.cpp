@@ -74,8 +74,8 @@ float getScore()
 	cout << e.what() << endl;
 	cin.clear();
 	cin.sync();
-	//score = getScore();
-	score = 0.0;
+	score = getScore();
+	//	score = 0.0;
     }
   return score;
 }
