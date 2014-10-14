@@ -4,7 +4,7 @@
 #include <iomanip>
 #include <stdexcept>
 #include <vector>
-
+#include <cmath>
 
 using namespace std;
 
@@ -23,6 +23,11 @@ struct Student
 };
 
 float getScore();
+float calcMean(vector<Student>);
+float calcStdDev(vector<Student>, float);
+void setGrade(vector<Student>&, float, float);
+void printScale(float, float);
+void printStudents(vector<Student>);
 
 int main()
 { 
@@ -31,6 +36,9 @@ int main()
   string name = "";
   float score = 0.0;
   char grade = 'A';
+  float mean = 0.0;
+  float stdev = 0.0;
+
   while(true)
     {
       cout << "Enter student name (enter none to quit): ";
@@ -44,12 +52,12 @@ int main()
       score = getScore();
       students.push_back(Student(name, score, grade));
     }
-  //students.pop_back();
-
- for(int i = 0; i < students.size(); i++)
-   {
-     cout << students[i].name << "\t" << students[i].score << endl;
-   }
+  mean = calcMean(students);
+  stdev = calcStdDev(students, mean);
+  setGrade(students, mean, stdev);
+  
+  printScale(mean, stdev);
+  printStudents(students);
   return 0;
 }
 
@@ -78,4 +86,63 @@ float getScore()
 	//	score = 0.0;
     }
   return score;
+}
+
+float calcMean(vector<Student> s)
+{
+  float mean;
+  for (int i = 0; i < s.size(); i++)
+    {
+      mean += s[i].score;
+    }
+  mean = mean / s.size();
+  return mean;
+}
+
+float calcStdDev(vector<Student> s, float mean)
+{
+  float stdev;
+  float ss;
+  for (int i = 0; i < s.size(); i++)
+    {
+      ss += pow(s[i].score - mean, 2);
+    }
+  stdev = sqrt(ss / s.size());
+  return stdev;
+}
+
+void setGrade(vector<Student> &s, float mean, float stdev)
+{
+  for (int i = 0; i < s.size(); i++)
+    {
+      if (s[i].score > mean + 1.5*stdev)
+	s[i].grade = 'A';
+      else if (s[i].score <= mean + 1.5*stdev || s[i].score > mean + 0.5*stdev)
+	s[i].grade = 'B';
+      else if (s[i].score <= mean + 0.5*stdev || s[i].score > mean - 0.5*stdev)
+	s[i].grade = 'C';
+      else if (s[i].score <= mean - 0.5*stdev || s[i].score > mean - 1.5*stdev)
+	s[i].grade = 'D';
+      else
+	s[i].grade = 'F';
+    }
+}
+
+void printScale(float mean, float stdev)
+{
+  printf("\tGrading Scale\n");
+  printf("A    above %.1f%%\n", mean + 1.5*stdev);
+  printf("B    %.1f%% - %.1f%%\n", mean + 0.5*stdev, mean + 1.5*stdev);
+  printf("C    %.1f%% - %.1f%%\n", mean - 0.5*stdev, mean + 0.5*stdev);
+  printf("D    %.1f%% - %.1f%%\n", mean - 1.5*stdev, mean - 0.5*stdev);
+  printf("F    below %.1f%%\n", mean - 1.5*stdev);
+}
+
+void printStudents(vector<Student> s)
+{
+  printf("Name\t\t\tScore\t\tGrade\n");
+  for (int i = 0; i < s.size(); i++)
+    {
+      printf("%d. %s\t\t%.1f%%\t\t%c\n", i+1, s[i].name.c_str(), s[i].score, s[i].grade);
+    }
 }
