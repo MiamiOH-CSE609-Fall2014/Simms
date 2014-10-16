@@ -5,8 +5,14 @@
 #include <stdexcept>
 #include <vector>
 #include <cmath>
+#include <limits>
 
 using namespace std;
+
+/*
+struct Student
+contains name, score, and grade for each student entered
+*/
 
 struct Student
 {
@@ -31,6 +37,10 @@ void printStudents(vector<Student>);
 
 int main()
 { 
+  /*
+    Initialization
+  */
+
   vector<Student> students;
 
   string name = "";
@@ -39,6 +49,12 @@ int main()
   float mean = 0.0;
   float stdev = 0.0;
 
+  /*
+    Main loop
+    Allows user to enter student names until 'none' is entered
+    Note: 'none' is case sensitive
+    Calls getScore() for error checking
+  */
   while(true)
     {
       cout << "Enter student name (enter none to quit): ";
@@ -52,6 +68,11 @@ int main()
       score = getScore();
       students.push_back(Student(name, score, grade));
     }
+
+  /*
+    Calculations using functions defined below main
+    Printing using functions defined below main
+  */
   mean = calcMean(students);
   stdev = calcStdDev(students, mean);
   setGrade(students, mean, stdev);
@@ -61,6 +82,14 @@ int main()
   return 0;
 }
 
+/*
+float getScore()
+Uses recursive calls for range error checking;
+does not check for character or string inputs
+
+returns score
+*/
+
 float getScore()
 {
   float score;
@@ -68,8 +97,6 @@ float getScore()
   try
     {
       cout << "Enter student's score (0 to 100): ";
-      // cin >> score;
-      // score = atof(getline(cin,str).c_str());
       getline(cin,str);
       score = atof(str.c_str());
       if (score < 0 || score > 100)
@@ -83,10 +110,16 @@ float getScore()
 	cin.clear();
 	cin.sync();
 	score = getScore();
-	//	score = 0.0;
     }
   return score;
 }
+
+/*
+float calcMean(vector<Student>)
+determines the mean of student scores mathematically
+
+returns mean
+*/
 
 float calcMean(vector<Student> s)
 {
@@ -99,6 +132,14 @@ float calcMean(vector<Student> s)
   return mean;
 }
 
+/*
+float calcStdDev(vector<Student>, float)
+determines the standard deviation of student scores mathematically
+uses mean as input to avoid excess looping
+
+returns stdev
+*/
+
 float calcStdDev(vector<Student> s, float mean)
 {
   float stdev;
@@ -110,6 +151,12 @@ float calcStdDev(vector<Student> s, float mean)
   stdev = sqrt(ss / s.size());
   return stdev;
 }
+
+/*
+void setGrade(vector<Student>&, float, float)
+sets the grade for each student based on input mean and standard deviation
+
+*/
 
 void setGrade(vector<Student> &s, float mean, float stdev)
 {
@@ -128,6 +175,12 @@ void setGrade(vector<Student> &s, float mean, float stdev)
     }
 }
 
+/*
+void printScale(float, float)
+prints the grading scale
+also prints the mean and standard deviation
+*/
+
 void printScale(float mean, float stdev)
 {
   printf("\n\tGrading Scale\n");
@@ -140,13 +193,16 @@ void printScale(float mean, float stdev)
   printf("     Standard Deviation: %.1f%%\n", stdev);
 }
 
+/*
+void printStudents(vector<Student>)
+prints student names, grades, and scores in a nicely formatted string
+*/
+
 void printStudents(vector<Student> s)
 {
-  //cout << "Name" << setw(50) << "Score" << setw(10) << "Grade" << endl;
   printf("Name\t\t\t\t\tGrade\t\tScore\n");
   for (int i = 0; i < s.size(); i++)
     {
-      // cout << i + 1 << ". " << s[i].name << setw(50) << fixed << s[i].score
       printf("%d. %-35s%.1f%%\t\t%c\n", i + 1, s[i].name.c_str(), s[i].score, s[i].grade);
     }
 }
