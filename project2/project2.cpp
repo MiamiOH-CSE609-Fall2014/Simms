@@ -117,11 +117,11 @@ void setGrade(vector<Student> &s, float mean, float stdev)
     {
       if (s[i].score > mean + 1.5*stdev)
 	s[i].grade = 'A';
-      else if (s[i].score <= mean + 1.5*stdev || s[i].score > mean + 0.5*stdev)
+      else if (s[i].score <= mean + 1.5*stdev && s[i].score > mean + 0.5*stdev)
 	s[i].grade = 'B';
-      else if (s[i].score <= mean + 0.5*stdev || s[i].score > mean - 0.5*stdev)
+      else if (s[i].score <= mean + 0.5*stdev && s[i].score > mean - 0.5*stdev)
 	s[i].grade = 'C';
-      else if (s[i].score <= mean - 0.5*stdev || s[i].score > mean - 1.5*stdev)
+      else if (s[i].score <= mean - 0.5*stdev && s[i].score > mean - 1.5*stdev)
 	s[i].grade = 'D';
       else
 	s[i].grade = 'F';
@@ -130,19 +130,23 @@ void setGrade(vector<Student> &s, float mean, float stdev)
 
 void printScale(float mean, float stdev)
 {
-  printf("\tGrading Scale\n");
+  printf("\n\tGrading Scale\n");
   printf("A    above %.1f%%\n", mean + 1.5*stdev);
   printf("B    %.1f%% - %.1f%%\n", mean + 0.5*stdev, mean + 1.5*stdev);
   printf("C    %.1f%% - %.1f%%\n", mean - 0.5*stdev, mean + 0.5*stdev);
   printf("D    %.1f%% - %.1f%%\n", mean - 1.5*stdev, mean - 0.5*stdev);
   printf("F    below %.1f%%\n", mean - 1.5*stdev);
+  printf("     Mean: %.1f%%\n", mean);
+  printf("     Standard Deviation: %.1f%%\n", stdev);
 }
 
 void printStudents(vector<Student> s)
 {
-  printf("Name\t\t\tScore\t\tGrade\n");
+  //cout << "Name" << setw(50) << "Score" << setw(10) << "Grade" << endl;
+  printf("Name\t\t\t\t\tGrade\t\tScore\n");
   for (int i = 0; i < s.size(); i++)
     {
-      printf("%d. %s\t\t%.1f%%\t\t%c\n", i+1, s[i].name.c_str(), s[i].score, s[i].grade);
+      // cout << i + 1 << ". " << s[i].name << setw(50) << fixed << s[i].score
+      printf("%d. %-35s%.1f%%\t\t%c\n", i + 1, s[i].name.c_str(), s[i].score, s[i].grade);
     }
 }
