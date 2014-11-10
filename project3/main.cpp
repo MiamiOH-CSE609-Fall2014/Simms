@@ -2,6 +2,7 @@
 #include <iostream>
 #include <tuple>
 #include <string>
+#include <map>
 
 #include "functions.h"
 
@@ -17,5 +18,10 @@ int main(int argc, char ** argv)
   for(int i = 0; i < comments.size(); i++)
     cout << comments[i] << endl;
   cout << get<2>(foo) << endl;
+
+  string seq = get<2>(foo);
+  map<string, int> scores = digramFreqScores(seq);
+  for(map<string, int>::iterator it = scores.begin(); it != scores.end(); ++it)
+    cout << it->first << " " << it->second << endl;
   return 0;
 }
