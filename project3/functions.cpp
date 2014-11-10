@@ -29,7 +29,7 @@ tuple<string, vector<string>, string> parseFastaFile(string filepath)
 
 map<string, int> digramFreqScores(string s)
 {
-  string digrams[16] = {"AA", "AT", "AC", "AG", "TA", "TT", "TC", "TG", "CA", "CT", "CC", "CG", "GA", "GT", "GC", "GG"};
+  string digrams[16] = {"AA", "AG", "AC", "AT", "GA", "GG", "GC", "GT", "CA", "CG", "CC", "CT", "TA", "TG", "TC", "TT"};
   int counters[16] = {};
   map<string, int> scores;
   for(int i = 0; i < s.length() - 1; i++)
@@ -53,4 +53,37 @@ map<string, int> digramFreqScores(string s)
 
     }
   return scores;
+}
+
+vector< vector<int> > digramFreqMatrix(map<string, int> d)
+{
+  vector< vector<int> > m;
+  vector<int> r0, r1, r2, r3;
+
+  r0.push_back(d["AA"]);
+  r0.push_back(d["AG"]);
+  r0.push_back(d["AC"]);
+  r0.push_back(d["AT"]);
+
+  r1.push_back(d["GA"]);
+  r1.push_back(d["GG"]);
+  r1.push_back(d["GC"]);
+  r1.push_back(d["GT"]);
+
+  r2.push_back(d["CA"]);
+  r2.push_back(d["CG"]);
+  r2.push_back(d["CC"]);
+  r2.push_back(d["CT"]);
+
+  r3.push_back(d["TA"]);
+  r3.push_back(d["TG"]);
+  r3.push_back(d["TC"]);
+  r3.push_back(d["TT"]);
+
+  m.push_back(r0);
+  m.push_back(r1);
+  m.push_back(r2);
+  m.push_back(r3);
+
+  return m;
 }

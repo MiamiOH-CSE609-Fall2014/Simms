@@ -23,5 +23,12 @@ int main(int argc, char ** argv)
   map<string, int> scores = digramFreqScores(seq);
   for(map<string, int>::iterator it = scores.begin(); it != scores.end(); ++it)
     cout << it->first << " " << it->second << endl;
+  vector< vector<int> > m = digramFreqMatrix(scores);
+  for(int r = 0; r < 4; r++)
+    {
+      for(int c = 0; c < 4; c++)
+	cout << m[r].at(c) << " ";
+      cout << "\n";
+    }
   return 0;
 }
