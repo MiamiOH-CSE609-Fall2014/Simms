@@ -4,6 +4,8 @@
 #include <fstream>
 #include <iostream>
 #include <map>
+#include <utility>
+#include <sstream>
 
 #include "functions.h"
 
@@ -86,4 +88,104 @@ vector< vector<int> > digramFreqMatrix(map<string, int> d)
   m.push_back(r3);
 
   return m;
+}
+
+vector< vector<int> > parseScoringFile(string filepath)
+{
+  fstream file;
+  file.open(filepath, fstream::in);
+  string line, entry;
+  vector< vector<int> > score_matrix;
+  vector<int> row;
+  int i = 0;
+  while(getline(file, line).good())
+    {
+      istringstream s(line);
+      while(getline(s, entry, ',').good())
+	row.push_back(stoi(entry));
+      row.push_back(stoi(entry));
+      score_matrix.push_back(row);
+      row.clear();
+    }
+   
+  return score_matrix;
+}
+
+pair<int, int> scoreSequence(string haystack, string needle, vector< vector<int> > scoring_m)
+{
+  string::iterator h;
+  string::iterator n;
+  string::iterator sub;
+  int pos;
+  int score;
+  int row;
+  int col;
+  int ind;
+  string first;
+  string second;
+  int maxScore = 0;
+
+  for(int i = 0; i < haystack.length() - needle.length() + 1; i++)
+    {
+      h = haystack.begin();
+      advance(h, i);
+      score = 0;
+      ind = 0;
+      sub = h;
+      for(n = needle.begin(); n != needle.end(); ++n)
+	{
+	  first = *sub;
+	  second = *n;
+	  if(first == "A") row = 0;
+	  if (first == "G") row = 1;
+	  if (first == "C") row = 2;
+	  if (first == "T") row = 3;
+
+	  if(second == "A") col = 0;
+	  if(second == "G") col = 1;
+	  if(second == "C") col = 2;
+	  if(second == "T") col = 3;
+	  
+	  score += scoring_m[col][row];
+	  
+	  ++sub;
+	}
+      if(score > maxScore)
+	{
+	  maxScore = score;
+	  pos = i;
+	}
+    }  
+  pair<int, int> max_score(pos, maxScore);
+  return max_score;
+}
+
+tuple<int, int, string> findHighScore(string haystack, vector<string> needles, vector< vector<int> > scoring_m)
+{
+  int maxScore = 0;
+  int score;
+  int pos;
+  int ind;
+  pair<int, int> first, second;
+  for(int i = 0; i < needles.size() - 1; i++)
+    {
+      first = scoreSequence(haystack, needles[i], scoring_m);
+      second = scoreSequence(haystack, needles[i + 1], scoring_m);
+      score = max(first.second, second.second);
+      if(score > maxScore)
+	{
+	  maxScore = score;
+	  if(first.second > second.second)
+	    {
+	      pos = first.first;
+	      ind = i;
+	    }
+	  else 
+	    {
+	      pos = second.first;
+	      ind = i + 1;
+	    }
+	}
+    }
+  return make_tuple(pos, maxScore, needles[ind]);
 }
