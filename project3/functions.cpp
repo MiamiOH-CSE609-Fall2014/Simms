@@ -150,7 +150,7 @@ pair<int, int> scoreSequence(string haystack, string needle, vector< vector<int>
 	  
 	  ++sub;
 	}
-      if(score > maxScore)
+      if(score >= maxScore)
 	{
 	  maxScore = score;
 	  pos = i;
@@ -167,12 +167,17 @@ tuple<int, int, string> findHighScore(string haystack, vector<string> needles, v
   int pos;
   int ind;
   pair<int, int> first, second;
+  if(needles.size() == 1)
+    {
+      first = scoreSequence(haystack, needles[0], scoring_m);
+      return make_tuple(first.first, first.second, needles[0]);
+    }
   for(int i = 0; i < needles.size() - 1; i++)
     {
       first = scoreSequence(haystack, needles[i], scoring_m);
       second = scoreSequence(haystack, needles[i + 1], scoring_m);
       score = max(first.second, second.second);
-      if(score > maxScore)
+      if(score >= maxScore)
 	{
 	  maxScore = score;
 	  if(first.second > second.second)
